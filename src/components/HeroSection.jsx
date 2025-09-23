@@ -90,7 +90,7 @@ const HeroContent = ({ selectedCircle }) => {
     null: {
       title: 'IMCN Research Unit',
       description:
-        'We combine knowledge from functional neuroanatomy, mathematical/computational modeling, and the cognitive/clinical neurosciences.',
+        'We take a rigorous interdisciplinary approach to understanding the deep brain, integrating insights from functional neuroanatomy, mathematical psychology, and cognitive and clinical neuroscience. Our work combines state-of-the-art methodologies—including whole-brain post-mortem processing, ultra-high-field (7T) MRI, and Bayesian hierarchical modeling—to advance both theoretical understanding and clinical relevance',
     },
   }
   const content = contentMap[selectedCircle] || contentMap.null

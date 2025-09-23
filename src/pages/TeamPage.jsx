@@ -133,7 +133,7 @@ const TeamPage = () => {
       id: 3,
       name: 'Steven Miletić',
       introduction:
-        'I am an assistant professor at Leiden University and senior scientist at the University of Amsterdam.  I am interested in model-based cognitive neuroscience with a strong focus on the human subcortex.',
+        'I am an assistant professor at Leiden University and senior scientist at the University of Amsterdam. My research focuses on the temporal dynamics of the mind and brain: How and why do we change while we engage in decision-making tasks. These dynamics occur on multiple timescales, and give crucial insight in the structure of the mind as well as its neural underpinnings, with a focus on the deep brain',
       avatar: 'SM',
       photo: '/images/team/steven-miletic.png',
     },
