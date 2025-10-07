@@ -24,11 +24,12 @@ function SponsorBar() {
 
   return (
     <section className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-          Supported By
+      <div className="max-w-7xl mx-auto px-4 py-8 text-center">
+        <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-10">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            Sponsors
+          </span>
         </h3>
-
         <div className="flex items-center justify-between gap-8 flex-wrap">
           {sponsors.map((sponsor, index) => (
             <a

@@ -10,12 +10,15 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300"
+      className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
+                 transition-colors duration-300"
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Get In Touch
-        </h2>
+      <div className="max-w-4xl mx-auto px-4 py-8 text-center">
+        <h3 className="text-4xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            Get in Touch
+          </span>
+        </h3>
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
           Let's discuss your ideas and inputs.d
         </p>
