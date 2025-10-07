@@ -75,7 +75,7 @@ const BRAIN_REGIONS = [
   },
 ]
 
-// Anatomical color schema from Materialise
+// Anatomical color schema
 const ANATOMICAL_COLORS = {
   amg: 'purple',
   fx: 'blue',
@@ -88,12 +88,12 @@ const ANATOMICAL_COLORS = {
   stn: 'bordeaux',
   tha: 'orange',
   vta: 'blue',
-  cl: 'orange', // fallback
-  ic: 'blue', // fallback
-  lv: 'lightblue', // fallback
-  str: 'yellow', // fallback
-  '3v': 'lightblue', // fallback
-  '4v': 'lightblue', // fallback
+  cl: 'orange',
+  ic: 'blue',
+  lv: '#00755E',
+  str: 'yellow',
+  '3v': '#00755E',
+  '4v': '#00755E',
 }
 
 // Color name to hex mapping
@@ -109,6 +109,27 @@ const COLOR_HEX_MAP = {
   orange: 0xe67e22,
   petrol: 0x006666,
   lightblue: 0x5dade2,
+}
+
+const parseColor = (color) => {
+  // If already a number, return it
+  if (typeof color === 'number') {
+    return color
+  }
+
+  // If it's a hex string like "#00755E"
+  if (typeof color === 'string' && color.startsWith('#')) {
+    // Remove the # and convert to number
+    return parseInt(color.substring(1), 16)
+  }
+
+  // If it's a color name, look it up in the map
+  if (typeof color === 'string' && COLOR_HEX_MAP[color.toLowerCase()]) {
+    return COLOR_HEX_MAP[color.toLowerCase()]
+  }
+
+  // Default fallback color (gray)
+  return 0x808080
 }
 
 const PREDICTION_TYPES = [
@@ -144,7 +165,7 @@ function BrainMeshViewer() {
   )
   const [showBilateral, setShowBilateral] = useState(true)
   const [showCenter, setShowCenter] = useState(true)
-  const [showPredictionColors, setShowPredictionColors] = useState(false) // NEW: Toggle for prediction colors
+  const [showPredictionColors, setShowPredictionColors] = useState(false)
   const [colorScale, setColorScale] = useState({ min: null, max: null })
   const [hoveredMesh, setHoveredMesh] = useState(null)
   const [hoveredValue, setHoveredValue] = useState(null)
@@ -476,11 +497,9 @@ function BrainMeshViewer() {
               colorMax={showPredictionColors ? colorScale.max : null}
               unit={selectedPrediction?.unit}
               showPredictionColors={showPredictionColors}
-              anatomicalColor={
-                COLOR_HEX_MAP[
-                  ANATOMICAL_COLORS[item.region.id.toLowerCase()]
-                ] || 0x808080
-              }
+              anatomicalColor={parseColor(
+                ANATOMICAL_COLORS[item.region.id.toLowerCase()] || 0x808080
+              )}
             />
           ))}
         </BrainContainer>

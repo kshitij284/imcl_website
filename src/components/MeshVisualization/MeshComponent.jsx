@@ -205,7 +205,7 @@ function MeshComponent({
         vertexColors
         side={THREE.DoubleSide}
         transparent
-        opacity={0.8}
+        opacity={1.0}
         wireframe={false}
       />
     </mesh>
