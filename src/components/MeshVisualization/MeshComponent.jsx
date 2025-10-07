@@ -14,6 +14,8 @@ function MeshComponent({
   onHover,
   onHoverEnd,
   unit,
+  showPredictionColors = false,
+  anatomicalColor = 0x808080,
 }) {
   const [geometry, setGeometry] = useState(null)
   const [currentValue, setCurrentValue] = useState(null)
@@ -48,7 +50,13 @@ function MeshComponent({
 
   // Update geometry
   useEffect(() => {
-    if (!meshData || !predData || colorMin === null || colorMax === null) {
+    if (!meshData || !predData) {
+      setGeometry(null)
+      return
+    }
+
+    // For prediction mode, we need colorMin and colorMax
+    if (showPredictionColors && (colorMin === null || colorMax === null)) {
       setGeometry(null)
       return
     }
@@ -57,7 +65,7 @@ function MeshComponent({
       const { vertices, faces } = meshData
       const newGeometry = new THREE.BufferGeometry()
 
-      // Positions - keep original positions to maintain relationships
+      // Positions
       const positions = new Float32Array(vertices.flat())
       newGeometry.setAttribute(
         'position',
@@ -70,28 +78,47 @@ function MeshComponent({
 
       // Colors
       const colors = new Float32Array(vertices.length * 3)
-      const predictionValues =
-        predData[age] || predData[Object.keys(predData)[0]] || []
-
-      const avgValue = Array.isArray(predictionValues)
-        ? predictionValues.reduce((sum, val) => sum + (val || 0), 0) /
-          predictionValues.length
-        : predictionValues || 0
-
-      setCurrentValue(avgValue)
-
-      const range = colorMax - colorMin
       const color = new THREE.Color()
 
-      for (let i = 0; i < vertices.length; i++) {
-        const val = Array.isArray(predictionValues)
-          ? predictionValues[i] || 0
+      if (showPredictionColors) {
+        // PREDICTION MODE: Use heatmap colors based on values
+        const predictionValues =
+          predData[age] || predData[Object.keys(predData)[0]] || []
+
+        const avgValue = Array.isArray(predictionValues)
+          ? predictionValues.reduce((sum, val) => sum + (val || 0), 0) /
+            predictionValues.length
           : predictionValues || 0
-        const normalizedVal = range > 0 ? (val - colorMin) / range : 0
-        color.setHSL((1 - normalizedVal) * 0.6, 0.8, 0.5)
-        colors[i * 3] = color.r
-        colors[i * 3 + 1] = color.g
-        colors[i * 3 + 2] = color.b
+
+        setCurrentValue(avgValue)
+
+        const range = colorMax - colorMin
+        const baseColor = new THREE.Color(0xff0000) // Red base color
+
+        for (let i = 0; i < vertices.length; i++) {
+          const val = Array.isArray(predictionValues)
+            ? predictionValues[i] || 0
+            : predictionValues || 0
+          const normalizedVal = range > 0 ? (val - colorMin) / range : 0
+
+          // Interpolate from white to red
+          color.lerpColors(new THREE.Color(0xffffff), baseColor, normalizedVal)
+
+          colors[i * 3] = color.r
+          colors[i * 3 + 1] = color.g
+          colors[i * 3 + 2] = color.b
+        }
+      } else {
+        // ANATOMICAL MODE: Use uniform color for the entire region
+        color.setHex(anatomicalColor)
+
+        for (let i = 0; i < vertices.length; i++) {
+          colors[i * 3] = color.r
+          colors[i * 3 + 1] = color.g
+          colors[i * 3 + 2] = color.b
+        }
+
+        setCurrentValue(null)
       }
 
       newGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
@@ -99,7 +126,7 @@ function MeshComponent({
       // Normals
       newGeometry.computeVertexNormals()
 
-      // Compute bounding box WITHOUT translating geometry
+      // Compute bounding box
       newGeometry.computeBoundingBox()
       newGeometry.computeBoundingSphere()
 
@@ -118,7 +145,16 @@ function MeshComponent({
       console.error('Error creating geometry:', err)
       setGeometry(null)
     }
-  }, [meshData, predData, age, colorMin, colorMax, disposeGeometry])
+  }, [
+    meshData,
+    predData,
+    age,
+    colorMin,
+    colorMax,
+    disposeGeometry,
+    showPredictionColors,
+    anatomicalColor,
+  ])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -130,14 +166,31 @@ function MeshComponent({
     }
   }, [disposeGeometry])
 
-  // Memoize hover handlers
-  const handlePointerEnter = useCallback(() => {
-    if (onHover) onHover(displayName, currentValue, unit)
-  }, [onHover, displayName, currentValue, unit])
+  const [isHovered, setIsHovered] = useState(false)
 
-  const handlePointerLeave = useCallback(() => {
-    if (onHoverEnd) onHoverEnd()
-  }, [onHoverEnd])
+  const handlePointerEnter = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setIsHovered(true)
+      if (onHover) {
+        if (showPredictionColors) {
+          onHover(displayName, currentValue, unit)
+        } else {
+          onHover(displayName, null, null)
+        }
+      }
+    },
+    [onHover, displayName, currentValue, unit, showPredictionColors]
+  )
+
+  const handlePointerLeave = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setIsHovered(false)
+      if (onHoverEnd) onHoverEnd()
+    },
+    [onHoverEnd]
+  )
 
   if (!geometry) return null
 
@@ -168,6 +221,8 @@ export default React.memo(MeshComponent, (prevProps, nextProps) => {
     prevProps.meshData === nextProps.meshData &&
     prevProps.predData === nextProps.predData &&
     prevProps.region === nextProps.region &&
-    prevProps.side === nextProps.side
+    prevProps.side === nextProps.side &&
+    prevProps.showPredictionColors === nextProps.showPredictionColors &&
+    prevProps.anatomicalColor === nextProps.anatomicalColor
   )
 })

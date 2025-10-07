@@ -15,7 +15,7 @@ function ColorLegend({ predictionType, unit, colorMin, colorMax }) {
       </div>
       <div className="flex items-center">
         <span className="text-xs mr-3 font-medium">Low</span>
-        <div className="w-32 h-4 bg-gradient-to-r from-blue-500 via-green-500 to-red-500 rounded-full shadow-inner"></div>
+        <div className="w-32 h-4 bg-gradient-to-r from-white to-red-600 rounded-full shadow-inner"></div>
         <span className="text-xs ml-3 font-medium">High</span>
       </div>
     </div>

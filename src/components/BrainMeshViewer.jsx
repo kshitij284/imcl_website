@@ -75,6 +75,42 @@ const BRAIN_REGIONS = [
   },
 ]
 
+// Anatomical color schema from Materialise
+const ANATOMICAL_COLORS = {
+  amg: 'purple',
+  fx: 'blue',
+  gpe: 'green',
+  gpi: 'yellow',
+  pag: 'purple',
+  ppn: 'brown',
+  rn: 'red',
+  sn: 'black',
+  stn: 'bordeaux',
+  tha: 'orange',
+  vta: 'blue',
+  cl: 'orange', // fallback
+  ic: 'blue', // fallback
+  lv: 'lightblue', // fallback
+  str: 'yellow', // fallback
+  '3v': 'lightblue', // fallback
+  '4v': 'lightblue', // fallback
+}
+
+// Color name to hex mapping
+const COLOR_HEX_MAP = {
+  purple: 0x9b59b6,
+  blue: 0x3498db,
+  green: 0x2ecc71,
+  yellow: 0xf1c40f,
+  brown: 0x8b4513,
+  red: 0xe74c3c,
+  black: 0x2c3e50,
+  bordeaux: 0x800020,
+  orange: 0xe67e22,
+  petrol: 0x006666,
+  lightblue: 0x5dade2,
+}
+
 const PREDICTION_TYPES = [
   { id: 'iron_median', name: 'Iron (Median)', unit: 'μg/g' },
   { id: 'iron_iqr', name: 'Iron (IQR)', unit: 'μg/g' },
@@ -108,6 +144,7 @@ function BrainMeshViewer() {
   )
   const [showBilateral, setShowBilateral] = useState(true)
   const [showCenter, setShowCenter] = useState(true)
+  const [showPredictionColors, setShowPredictionColors] = useState(false) // NEW: Toggle for prediction colors
   const [colorScale, setColorScale] = useState({ min: null, max: null })
   const [hoveredMesh, setHoveredMesh] = useState(null)
   const [hoveredValue, setHoveredValue] = useState(null)
@@ -141,6 +178,24 @@ function BrainMeshViewer() {
         })
       }
     )
+  }, [selectedRegions, showBilateral])
+
+  // Calculate which meshes SHOULD be visible based on current settings
+  const visibleMeshIds = useMemo(() => {
+    const ids = new Set()
+    BRAIN_REGIONS.forEach((region) => {
+      if (!selectedRegions.includes(region.id)) return
+
+      if (region.hasLR) {
+        ids.add(`${region.id}-L`)
+        if (showBilateral) {
+          ids.add(`${region.id}-R`)
+        }
+      } else {
+        ids.add(`${region.id}-L`)
+      }
+    })
+    return ids
   }, [selectedRegions, showBilateral])
 
   // Progressive loading with batching
@@ -244,9 +299,9 @@ function BrainMeshViewer() {
     }
   }, [meshesToFetch, predictionType])
 
-  // Compute loaded data array - memoized
+  // Compute loaded data array - only render visible meshes
   const loadedData = useMemo(() => {
-    return Object.keys(dataMap)
+    return Array.from(visibleMeshIds)
       .filter(
         (id) => dataMap[id]?.meshData && dataMap[id]?.predData?.[predictionType]
       )
@@ -257,11 +312,11 @@ function BrainMeshViewer() {
         meshData: dataMap[id].meshData,
         predData: dataMap[id].predData[predictionType],
       }))
-  }, [dataMap, predictionType])
+  }, [dataMap, predictionType, visibleMeshIds])
 
   // Recalculate color scale - memoized
   useEffect(() => {
-    if (loadedData.length === 0) {
+    if (loadedData.length === 0 || !showPredictionColors) {
       setColorScale({ min: null, max: null })
       return
     }
@@ -281,7 +336,7 @@ function BrainMeshViewer() {
     } else {
       setColorScale({ min: null, max: null })
     }
-  }, [loadedData, age])
+  }, [loadedData, age, showPredictionColors])
 
   const selectedPrediction = useMemo(
     () => PREDICTION_TYPES.find((p) => p.id === predictionType),
@@ -314,6 +369,8 @@ function BrainMeshViewer() {
         setShowBilateral={setShowBilateral}
         showCenter={showCenter}
         setShowCenter={setShowCenter}
+        showPredictionColors={showPredictionColors}
+        setShowPredictionColors={setShowPredictionColors}
         selectedPrediction={selectedPrediction}
         isCollapsed={isControlsCollapsed}
         setIsCollapsed={setIsControlsCollapsed}
@@ -346,10 +403,12 @@ function BrainMeshViewer() {
         <div className="absolute bottom-4 right-4 text-white bg-black bg-opacity-90 p-4 rounded-xl backdrop-blur-md border border-white border-opacity-10 shadow-2xl">
           <div className="flex items-center mb-2">
             <Maximize2 size={16} className="mr-2 text-blue-400" />
-            <span className="font-bold">Age: {age} years</span>
+            <span className="font-bold">
+              {showPredictionColors ? `Age: ${age} years` : 'Anatomical View'}
+            </span>
           </div>
           <div className="text-sm mb-3 text-blue-200 font-medium">
-            {selectedPrediction?.name}
+            {showPredictionColors ? selectedPrediction?.name : 'Default Colors'}
           </div>
           {loadedData.length > 0 && (
             <div className="text-xs text-gray-400">
@@ -360,7 +419,7 @@ function BrainMeshViewer() {
       )}
 
       {/* Tooltip */}
-      {hoveredMesh && hoveredValue !== null && (
+      {hoveredMesh && hoveredValue !== null && showPredictionColors && (
         <div
           className="absolute pointer-events-none z-50 bg-black bg-opacity-90 text-white p-3 rounded-lg text-sm shadow-2xl border border-white border-opacity-20"
           style={{
@@ -376,12 +435,26 @@ function BrainMeshViewer() {
         </div>
       )}
 
+      {/* Tooltip for anatomical mode */}
+      {hoveredMesh && !showPredictionColors && (
+        <div
+          className="absolute pointer-events-none z-50 bg-black bg-opacity-90 text-white p-3 rounded-lg text-sm shadow-2xl border border-white border-opacity-20"
+          style={{
+            left: mousePosition.x + 10,
+            top: mousePosition.y - 10,
+            transform: 'translateY(-100%)',
+          }}
+        >
+          <div className="font-bold text-blue-300">{hoveredMesh}</div>
+        </div>
+      )}
+
       {/* 3D Scene */}
       <Canvas
         camera={{ position: [0, 0, 15], fov: 45 }}
         style={{ width: '100%', height: '100%' }}
-        dpr={[1, 2]} // Limit pixel ratio for performance
-        performance={{ min: 0.5 }} // Allow frame rate to drop if needed
+        dpr={[1, 2]}
+        performance={{ min: 0.5 }}
       >
         <ambientLight intensity={0.7} />
         <directionalLight position={[10, 10, 5]} intensity={1.2} />
@@ -399,9 +472,15 @@ function BrainMeshViewer() {
               predictionType={predictionType}
               meshData={item.meshData}
               predData={item.predData}
-              colorMin={colorScale.min}
-              colorMax={colorScale.max}
+              colorMin={showPredictionColors ? colorScale.min : null}
+              colorMax={showPredictionColors ? colorScale.max : null}
               unit={selectedPrediction?.unit}
+              showPredictionColors={showPredictionColors}
+              anatomicalColor={
+                COLOR_HEX_MAP[
+                  ANATOMICAL_COLORS[item.region.id.toLowerCase()]
+                ] || 0x808080
+              }
             />
           ))}
         </BrainContainer>
@@ -416,12 +495,14 @@ function BrainMeshViewer() {
         />
       </Canvas>
 
-      <ColorLegend
-        predictionType={selectedPrediction?.name}
-        unit={selectedPrediction?.unit}
-        colorMin={colorScale.min}
-        colorMax={colorScale.max}
-      />
+      {showPredictionColors && (
+        <ColorLegend
+          predictionType={selectedPrediction?.name}
+          unit={selectedPrediction?.unit}
+          colorMin={colorScale.min}
+          colorMax={colorScale.max}
+        />
+      )}
     </div>
   )
 }

@@ -1,15 +1,5 @@
 import { useState } from 'react'
-
-import {
-  ChevronDown,
-  Eye,
-  EyeOff,
-  Info,
-  Settings,
-  Maximize2,
-  ChevronRight,
-  ChevronLeft,
-} from 'lucide-react'
+import { ChevronDown, Eye, EyeOff } from 'lucide-react'
 
 const BRAIN_REGIONS = [
   { id: '3V', name: '3rd Ventricle', meshFile: '3V-3_mesh.json' },
@@ -103,11 +93,11 @@ function RegionDropdown({
     <div className="relative">
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full p-2 border border-gray-300 rounded-lg bg-white cursor-pointer flex items-center justify-between hover:border-blue-400 transition-all duration-200 hover:shadow-md ${
+        className={`w-full p-2 border border-gray-600 rounded-lg bg-gray-800 cursor-pointer flex items-center justify-between hover:border-blue-400 transition-all duration-200 hover:bg-gray-700 ${
           isCompact ? 'text-xs' : 'text-sm'
         }`}
       >
-        <span className="font-medium text-gray-700 truncate">
+        <span className="font-medium text-white truncate">
           {selectedRegions.length === 0
             ? 'No regions'
             : `${selectedRegions.length} region${
@@ -116,25 +106,31 @@ function RegionDropdown({
         </span>
         <ChevronDown
           size={14}
-          className={`transform transition-transform duration-200 ${
+          className={`transform transition-transform duration-200 text-blue-400 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
       </div>
 
       {isOpen && (
-        <div className="absolute z-30 w-64 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-y-auto right-0">
+        <div className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-600 rounded-xl shadow-2xl max-h-72 overflow-hidden left-0">
           {/* Action buttons */}
-          <div className="p-3 border-b border-gray-100 flex gap-2 bg-gray-50 rounded-t-xl">
+          <div className="p-3 border-b border-gray-700 flex gap-2 bg-gray-900 rounded-t-xl">
             <button
-              onClick={selectAll}
+              onClick={(e) => {
+                e.stopPropagation()
+                selectAll()
+              }}
               className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 font-medium"
             >
               Select All
             </button>
             <button
-              onClick={deselectAll}
-              className="px-3 py-1 text-xs bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 font-medium"
+              onClick={(e) => {
+                e.stopPropagation()
+                deselectAll()
+              }}
+              className="px-3 py-1 text-xs bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium"
             >
               Deselect All
             </button>
@@ -147,22 +143,25 @@ function RegionDropdown({
               return (
                 <div
                   key={region.id}
-                  onClick={() => toggleRegion(region.id)}
-                  className={`p-2 cursor-pointer flex items-center justify-between hover:bg-blue-50 transition-all duration-200 ${
-                    isSelected ? 'bg-blue-100 border-l-4 border-blue-500' : ''
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleRegion(region.id)
+                  }}
+                  className={`p-2 cursor-pointer flex items-center justify-between hover:bg-gray-700 transition-all duration-200 ${
+                    isSelected ? 'bg-blue-900 border-l-4 border-blue-500' : ''
                   }`}
                 >
                   <div className="flex items-center">
                     {isSelected ? (
-                      <Eye size={14} className="text-blue-500 mr-2" />
+                      <Eye size={14} className="text-blue-400 mr-2" />
                     ) : (
-                      <EyeOff size={14} className="text-gray-400 mr-2" />
+                      <EyeOff size={14} className="text-gray-500 mr-2" />
                     )}
                     <span
                       className={`text-xs ${
                         isSelected
-                          ? 'font-semibold text-blue-700'
-                          : 'text-gray-700'
+                          ? 'font-semibold text-blue-300'
+                          : 'text-gray-300'
                       }`}
                     >
                       {region.name}
