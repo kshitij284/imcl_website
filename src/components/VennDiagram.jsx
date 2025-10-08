@@ -1,64 +1,53 @@
 import React, { useState, useEffect } from 'react'
 
-// The component now accepts an 'isExpanded' prop from its parent
 const VennDiagram = ({ isExpanded, onCircleClick }) => {
-  // We keep the internal state for hover effects
   const [isHovered, setIsHovered] = useState(false)
   const [hoveredCircle, setHoveredCircle] = useState(null)
-  // New state to control image visibility with a delay
   const [showImages, setShowImages] = useState(false)
 
-  // Define the transition duration to use in the timeout
-  const transitionDurationMs = 500 // Matches the circle's transition duration
+  const transitionDurationMs = 500
 
-  // Use useEffect to add a delay to the image visibility
   useEffect(() => {
     let timeoutId
 
     if (isExpanded || isHovered) {
-      // Set a timeout to show images after the circle transition completes
       timeoutId = setTimeout(() => {
         setShowImages(true)
       }, transitionDurationMs)
     } else {
-      // Immediately hide images when the diagram collapses
       setShowImages(false)
     }
 
-    // Cleanup the timeout if the state changes before it fires
     return () => clearTimeout(timeoutId)
   }, [isExpanded, isHovered])
 
-  // Check if expansion is active (hover or prop-based)
   const isExpansionActive = isHovered || isExpanded
 
-  // Circle definitions - positions now depend on expansion state (increased distances)
+  // Adjusted circle positions for better centering and proper overlap in collapsed state
   const circles = {
     A: {
-      cx: isExpansionActive ? 120 : 260,
-      cy: isExpansionActive ? 100 : 200,
+      cx: isExpansionActive ? 150 : 255,
+      cy: isExpansionActive ? 120 : 220,
       r: 60,
       image: '/images/A.jpg',
     },
     B: {
-      cx: isExpansionActive ? 480 : 360,
-      cy: isExpansionActive ? 100 : 200,
+      cx: isExpansionActive ? 450 : 345,
+      cy: isExpansionActive ? 120 : 220,
       r: 60,
       image: 'images/B.jpg',
     },
     C: {
-      cx: isExpansionActive ? 300 : 310,
-      cy: isExpansionActive ? 400 : 280,
+      cx: isExpansionActive ? 300 : 300,
+      cy: isExpansionActive ? 400 : 300,
       r: 60,
       image: 'images/C.jpg',
     },
   }
 
-  // Calculate center position based on the triangle formed by A, B, C
-  const centerX = isExpansionActive ? (120 + 480 + 300) / 3 : 300 // = 300 when expanded
-  const centerY = isExpansionActive ? (100 + 100 + 400) / 3 : 190 // ≈ 190 when expanded
+  const centerX = isExpansionActive ? (150 + 450 + 300) / 3 : 300
+  const centerY = isExpansionActive ? (120 + 120 + 400) / 3 : 240
 
-  // Add center circle
   circles.Center = {
     cx: centerX,
     cy: centerY,
@@ -66,18 +55,15 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
     image: '/images/Center.jpg',
   }
 
-  // Arrow definitions - now includes double-headed arrows to center
   const arrows = [
     { from: 'A', to: 'B' },
     { from: 'C', to: 'B' },
     { from: 'A', to: 'C' },
-    // Double-headed arrows between center and each outer circle
     { from: 'Center', to: 'A', doubleHeaded: true },
     { from: 'Center', to: 'B', doubleHeaded: true },
     { from: 'Center', to: 'C', doubleHeaded: true },
   ]
 
-  // Function to calculate arrow coordinates
   const calculateArrow = (fromCircle, toCircle) => {
     const dx = toCircle.cx - fromCircle.cx
     const dy = toCircle.cy - fromCircle.cy
@@ -96,7 +82,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
     return { startX, startY, endX, endY }
   }
 
-  // Updated Arrow component with new text logic
   const Arrow = ({ from, to, doubleHeaded = false }) => {
     const fromCircle = circles[from]
     const toCircle = circles[to]
@@ -104,11 +89,9 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
 
     if (!coords) return null
 
-    // For arrows involving the center circle, only show when expanded or hovered
     const isCenterArrow = from === 'Center' || to === 'Center'
     const shouldShow = isExpansionActive
 
-    // Calculate properties for text positioning
     const midX = (coords.startX + coords.endX) / 2
     const midY = (coords.startY + coords.endY) / 2
     const dx = coords.endX - coords.startX
@@ -119,21 +102,16 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
 
     const unitX = dx / length
     const unitY = dy / length
-    // Calculate angle for text rotation (in degrees)
     let angle = Math.atan2(dy, dx) * (180 / Math.PI)
 
-    // Adjust angle to prevent upside-down text
     if (angle > 90 || angle < -90) {
       angle = angle + 180
     }
 
-    // Perpendicular vector for text offset
     const perpX = -unitY * 15
     const perpY = unitX * 15
 
-    // Define text content for different arrow types
     const getArrowText = () => {
-      // Text for arrows between A, B, C (outer circles)
       if (!isCenterArrow) {
         if ((from === 'A' && to === 'B') || (from === 'B' && to === 'A')) {
           return { top: null, bottom: 'Experimental Psychology' }
@@ -146,7 +124,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         }
       }
 
-      // Text for arrows from A & B to center (only on top, aligned with arrow)
       if (
         (from === 'A' && to === 'Center') ||
         (from === 'Center' && to === 'A')
@@ -160,7 +137,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         return { top: 'Psychology', bottom: 'Mathematical' }
       }
 
-      // No text for arrows between center and C
       if (
         (from === 'C' && to === 'Center') ||
         (from === 'Center' && to === 'C')
@@ -190,7 +166,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
           markerStart={doubleHeaded ? 'url(#arrowhead-start)' : ''}
         />
 
-        {/* Top text */}
         {textContent.top && (
           <text
             x={midX + perpX}
@@ -206,7 +181,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
           </text>
         )}
 
-        {/* Bottom text */}
         {textContent.bottom && (
           <text
             x={midX - perpX}
@@ -222,7 +196,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
           </text>
         )}
 
-        {/* Center-aligned text for center arrows - positioned above the arrow */}
         {textContent.center && (
           <text
             x={midX}
@@ -245,16 +218,16 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
     <svg
       width="100%"
       height="100%"
-      viewBox="0 0 600 600"
-      // Keep hover handlers on the SVG to control hover-based expansion
+      viewBox="0 0 600 500"
+      preserveAspectRatio="xMidYMid meet"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false)
         setHoveredCircle(null)
       }}
+      className="max-w-full h-auto"
     >
       <defs>
-        {/* Regular arrowhead - smaller size */}
         <marker
           id="arrowhead"
           markerWidth="8"
@@ -266,7 +239,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
           <polygon points="0 0, 8 3, 0 6" fill="black" />
         </marker>
 
-        {/* Arrowhead for the start of double-headed arrows - smaller size */}
         <marker
           id="arrowhead-start"
           markerWidth="8"
@@ -278,7 +250,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
           <polygon points="8 0, 0 3, 8 6" fill="black" />
         </marker>
 
-        {/* Define a clipPath for each circle to crop the images */}
         <clipPath id="clipA">
           <circle cx={circles.A.cx} cy={circles.A.cy} r={circles.A.r} />
         </clipPath>
@@ -297,16 +268,14 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         </clipPath>
       </defs>
 
-      {/* Background */}
       <rect
-        width="600"
-        height="500"
+        width="100%"
+        height="100%"
         fill="white"
         rx="10"
         className="transition-all duration-300 ease-in-out"
       />
 
-      {/* Render all arrows */}
       {arrows.map((arrow, index) => (
         <Arrow
           key={index}
@@ -316,7 +285,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         />
       ))}
 
-      {/* Images for original circles A, B, C */}
       <image
         href={circles.A.image}
         x={circles.A.cx - circles.A.r}
@@ -354,7 +322,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         clipPath="url(#clipC)"
       />
 
-      {/* Image for center circle - only shows when expanded or hovered */}
       <image
         href={circles.Center.image}
         x={circles.Center.cx - circles.Center.r}
@@ -368,7 +335,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         clipPath="url(#clipCenter)"
       />
 
-      {/* Original circles A, B, C */}
       {['A', 'B', 'C'].map((circleId) => (
         <circle
           key={circleId}
@@ -389,7 +355,6 @@ const VennDiagram = ({ isExpanded, onCircleClick }) => {
         />
       ))}
 
-      {/* Center circle - only visible when expanded or hovered */}
       <circle
         cx={circles.Center.cx}
         cy={circles.Center.cy}

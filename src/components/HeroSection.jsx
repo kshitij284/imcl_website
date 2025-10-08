@@ -40,10 +40,10 @@ const HeroSection = () => {
     <section
       id="home"
       ref={heroSectionRef}
-      className={`max-auto text-center bg-gradient-to-br ${backgroundColors[selectedCircle]} transition-colors duration-500`}
+      className={`flex items-center bg-gradient-to-br ${backgroundColors[selectedCircle]} transition-colors duration-500`}
     >
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 ">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <HeroSectionVenn
             isDiagramExpanded={isDiagramExpanded}
             onCircleClick={handleCircleClick}
@@ -57,8 +57,8 @@ const HeroSection = () => {
 
 const HeroSectionVenn = ({ isDiagramExpanded, onCircleClick }) => {
   return (
-    <div className="relative venn-diagram-container">
-      <div className="aspect-square rounded-2xl flex items-center justify-center transition-colors duration-300 bg-transparent">
+    <div className="relative w-full flex items-center justify-center">
+      <div className="w-full max-w-lg rounded-2xl flex items-center justify-center transition-all duration-300 bg-transparent">
         <VennDiagram
           isExpanded={isDiagramExpanded}
           onCircleClick={onCircleClick}
@@ -94,16 +94,19 @@ const HeroContent = ({ selectedCircle }) => {
     },
   }
   const content = contentMap[selectedCircle] || contentMap.null
+
   return (
-    <div className="mt-8">
-      <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6 mt-8">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-          {content.title}
-        </span>
-      </h2>
-      <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-left">
-        {content.description}
-      </p>
+    <div className="w-full max-w-lg mx-auto lg:mx-0 flex flex-col justify-center h-full py-8 lg:py-0">
+      <div className="space-y-6">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            {content.title}
+          </span>
+        </h2>
+        <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+          {content.description}
+        </p>
+      </div>
     </div>
   )
 }

@@ -77,23 +77,23 @@ const BRAIN_REGIONS = [
 
 // Anatomical color schema
 const ANATOMICAL_COLORS = {
-  amg: 'purple',
+  amg: '#AA8ABC',
   fx: 'blue',
   gpe: 'green',
-  gpi: 'yellow',
+  gpi: '#AD343E',
   pag: 'purple',
   ppn: 'brown',
   rn: 'red',
   sn: 'black',
   stn: 'bordeaux',
-  tha: 'orange',
+  tha: '#78528E',
   vta: 'blue',
-  cl: 'orange',
-  ic: 'blue',
-  lv: '#00755E',
-  str: 'yellow',
-  '3v': '#00755E',
-  '4v': '#00755E',
+  cl: '#7A1600',
+  ic: '#62BEC1',
+  lv: '#1C398E',
+  str: '#FF8A70',
+  '3v': '#A3E7FC',
+  '4v': '#F6AE2D',
 }
 
 // Color name to hex mapping

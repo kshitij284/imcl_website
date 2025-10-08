@@ -40,7 +40,7 @@ const Introduction = () => {
 
       {/* Two Column Layout */}
       <div className="max-w-7xl mx-auto px-4 py-2">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16">
           {/* Left Column - Welcome Message */}
           <div className="flex flex-col justify-center text-center md:text-left">
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 dark:text-white mb-4">
