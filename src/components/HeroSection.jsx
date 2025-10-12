@@ -71,21 +71,24 @@ const HeroSectionVenn = ({ isDiagramExpanded, onCircleClick }) => {
 const HeroContent = ({ selectedCircle }) => {
   const contentMap = {
     A: {
-      title: 'Behavioral Neuroscience',
-      description: 'Exploring the neural mechanisms underlying behavior.',
+      title: 'Behavioral Data',
+      description:
+        'We collect behavioral data—measurements of observable actions such as response times or accuracy—during cognitive tasks. These data allow us to characterize how people perform and adapt under different experimental conditions.',
     },
     B: {
-      title: 'Computational Neuroscience',
-      description: 'Modeling brain functions through computational approaches.',
+      title: 'Cognitive Process',
+      description:
+        'We use formal models to infer latent cognitive processes, such as error-driven learning or response caution, that drive observed behavior. By estimating these hidden processes, we can better understand the mental operations underlying task performance.',
     },
     C: {
-      title: 'Anatomy and Physiology',
+      title: 'Brain Data',
       description:
-        'Understanding the structure and function of the nervous system.',
+        'We acquire brain data, ranging from immunohistochemistry to fMRI, to observe neural activity associated with cognitive functions. These measurements help us link specific cognitive processes to their neural substrates, deepening our understanding of how the brain supports cognition.',
     },
     Center: {
       title: 'Formal Model',
-      description: 'Something I dont know yet. Will fill in later.',
+      description:
+        'Joint models allow us to simultaneously model and understand all modalities of data, acquired from behavior and the brain.',
     },
     null: {
       title: 'IMCN Research Unit',
