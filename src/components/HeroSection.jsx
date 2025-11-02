@@ -57,12 +57,14 @@ const HeroSection = () => {
 
 const HeroSectionVenn = ({ isDiagramExpanded, onCircleClick }) => {
   return (
-    <div className="relative w-full flex items-center justify-center">
-      <div className="w-full max-w-lg rounded-2xl flex items-center justify-center transition-all duration-300 bg-transparent">
-        <VennDiagram
-          isExpanded={isDiagramExpanded}
-          onCircleClick={onCircleClick}
-        />
+    <div className="w-full flex items-center justify-center py-8 lg:py-0">
+      <div className="w-full max-w-lg">
+        <div className="w-full rounded-2xl flex items-center justify-center transition-all duration-300 bg-transparent">
+          <VennDiagram
+            isExpanded={isDiagramExpanded}
+            onCircleClick={onCircleClick}
+          />
+        </div>
       </div>
     </div>
   )
@@ -91,7 +93,7 @@ const HeroContent = ({ selectedCircle }) => {
         'Joint models allow us to simultaneously model and understand all modalities of data, acquired from behavior and the brain.',
     },
     null: {
-      title: 'IMCN Research Unit',
+      title: '',
       description:
         'We take a rigorous interdisciplinary approach to understanding the deep brain, integrating insights from functional neuroanatomy, mathematical psychology, and cognitive and clinical neuroscience. Our work combines state-of-the-art methodologies—including whole-brain post-mortem processing, ultra-high-field (7T) MRI, and Bayesian hierarchical modeling—to advance both theoretical understanding and clinical relevance',
     },
@@ -99,16 +101,18 @@ const HeroContent = ({ selectedCircle }) => {
   const content = contentMap[selectedCircle] || contentMap.null
 
   return (
-    <div className="w-full max-w-lg mx-auto lg:mx-0 flex flex-col justify-center h-full py-8 lg:py-0">
-      <div className="space-y-6">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-            {content.title}
-          </span>
-        </h2>
-        <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-          {content.description}
-        </p>
+    <div className="w-full flex items-center justify-center py-8 lg:py-0">
+      <div className="w-full max-w-lg">
+        <div className="flex flex-col items-center justify-center text-center space-y-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+              {content.title}
+            </span>
+          </h2>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+            {content.description}
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -27,7 +27,7 @@ function SponsorBar() {
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
         <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-10">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-            Sponsors
+            Funding Agencies
           </span>
         </h3>
         <div className="flex items-center justify-between gap-8 flex-wrap">
