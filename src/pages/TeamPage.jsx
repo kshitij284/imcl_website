@@ -152,29 +152,38 @@ const TeamPage = () => {
     },
     {
       id: 5,
-      name: 'Lysanne Groenewegen',
-      designation: 'PhD Student',
+      name: 'Pilou Bazin',
+      designation: 'Senior Scientist',
       introduction:
-        'I am a PhD student supervised by Anneke Alkemade and Birte Forstmann at the University of Amsterdam (Netherlands). My research focuses on 3D reconstructions of whole-brain vascular immunoreactivity and Alzheimer’s pathology. I integrate high-resolution post-mortem MRI with (immuno)histochemistry to create frameworks that capture both the broader anatomical context and the fine-scale vascular and pathological profiles across (sub)cortical structures.',
-      avatar: 'LG',
+        'I am a senior scientist focussing on neuroimaging of the subcortex. My work combines ultra-high field magnetic resonance imaging with computational neuroanatomy in order to better understand the interplay of structure, connectivity and physiology of the subcortex in shaping human behavior.',
+      avatar: 'PB',
       photo: null,
     },
     {
       id: 6,
-      name: 'Ettore Cerracchio',
-      designation: 'PhD Student',
+      name: 'Pilou Bazin',
+      designation: 'Senior Scientist',
       introduction:
-        'I am a PhD student working on human decision-making biases, such as spatial attention and decision priors. To this end, I combine structural and functional ultra-high field MRI with sequential sampling models.',
-      avatar: 'EC',
+        'I am a senior scientist focussing on neuroimaging of the subcortex. My work combines ultra-high field magnetic resonance imaging with computational neuroanatomy in order to better understand the interplay of structure, connectivity and physiology of the subcortex in shaping human behavior.',
+      avatar: 'PB',
       photo: null,
     },
     {
       id: 7,
-      name: 'Rawien Balesar',
-      designation: 'PhD Student',
+      name: 'Pilou Bazin',
+      designation: 'Senior Scientist',
       introduction:
-        'I am a technical assistant working with post-mortem data of subcortical nuclei in collaboration with Dick Swaab (Netherlands Institute for Neuroscience, Amsterdam, Netherlands).',
-      avatar: 'RB',
+        'I am a senior scientist focussing on neuroimaging of the subcortex. My work combines ultra-high field magnetic resonance imaging with computational neuroanatomy in order to better understand the interplay of structure, connectivity and physiology of the subcortex in shaping human behavior.',
+      avatar: 'PB',
+      photo: null,
+    },
+    {
+      id: 8,
+      name: 'Pilou Bazin',
+      designation: 'Senior Scientist',
+      introduction:
+        'I am a senior scientist focussing on neuroimaging of the subcortex. My work combines ultra-high field magnetic resonance imaging with computational neuroanatomy in order to better understand the interplay of structure, connectivity and physiology of the subcortex in shaping human behavior.',
+      avatar: 'PB',
       photo: null,
     },
   ]
