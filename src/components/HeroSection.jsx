@@ -40,7 +40,7 @@ const HeroSection = () => {
     <section
       id="home"
       ref={heroSectionRef}
-      className={`flex items-center bg-gradient-to-br ${backgroundColors[selectedCircle]} transition-colors duration-500`}
+      className={`bg-gradient-to-br ${backgroundColors[selectedCircle]} transition-colors duration-500`}
     >
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -57,8 +57,8 @@ const HeroSection = () => {
 
 const HeroSectionVenn = ({ isDiagramExpanded, onCircleClick }) => {
   return (
-    <div className="w-full flex items-center justify-center py-8 lg:py-0">
-      <div className="w-full max-w-lg">
+    <div className="w-full flex justify-center items-center py-8 lg:py-0">
+      <div className="w-full lg:w-[512px]">
         <div className="w-full rounded-2xl flex items-center justify-center transition-all duration-300 bg-transparent">
           <VennDiagram
             isExpanded={isDiagramExpanded}
@@ -101,9 +101,9 @@ const HeroContent = ({ selectedCircle }) => {
   const content = contentMap[selectedCircle] || contentMap.null
 
   return (
-    <div className="w-full flex items-center justify-center py-8 lg:py-0">
-      <div className="w-full max-w-lg">
-        <div className="flex flex-col items-center justify-center text-center space-y-6">
+    <div className="w-full flex justify-center items-center py-8 lg:py-0">
+      <div className="w-full lg:w-[512px]">
+        <div className="flex flex-col items-center text-center space-y-6">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
               {content.title}

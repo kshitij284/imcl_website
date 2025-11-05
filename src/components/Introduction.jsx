@@ -38,10 +38,10 @@ const Introduction = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-2">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center">
-          <div className="w-full flex items-center justify-center py-8 lg:py-0">
-            <div className="w-full max-w-lg">
-              <div className="flex flex-col items-center justify-center text-center space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+          <div className="w-full flex justify-center items-center py-8 lg:py-0">
+            <div className="w-full lg:w-[512px]">
+              <div className="flex flex-col items-center text-center space-y-6">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                     IMCN Reseach Unit
@@ -57,9 +57,8 @@ const Introduction = () => {
               </div>
             </div>
           </div>
-
-          <div className="w-full flex items-center justify-center py-8 lg:py-0">
-            <div className="w-full max-w-lg">
+          <div className="w-full flex justify-center items-center py-8 lg:py-0">
+            <div className="w-full lg:w-[512px]">
               <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
                   <FileText className="h-5 w-5 mr-2 text-purple-600 dark:text-purple-400" />

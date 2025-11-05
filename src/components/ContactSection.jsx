@@ -20,7 +20,7 @@ const ContactSection = () => {
           </span>
         </h3>
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-          Let's discuss your ideas and inputs.d
+          Let's discuss your ideas and inputs.
         </p>
         <button
           onClick={handleContactClick}
