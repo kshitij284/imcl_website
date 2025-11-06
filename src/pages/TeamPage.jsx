@@ -50,23 +50,23 @@ const LeadershipCard = ({ member }) => {
 // Regular Team Member Card
 const TeamMemberCard = ({ member }) => {
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 hover:-translate-y-1">
+    <div className="group bg-white dark:bg-gray-800 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700 hover:-translate-y-2">
       {/* Avatar Section */}
-      <div className="relative bg-gradient-to-br from-blue-500 to-teal-500 p-6 text-center">
-        <div className="w-16 h-16 mx-auto rounded-full mb-3 group-hover:scale-110 transition-transform duration-300 overflow-hidden">
-          {member.photo ? (
-            <img
-              src={member.photo}
-              alt={member.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold">
-              {member.avatar}
-            </div>
-          )}
-        </div>
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-transparent to-black/10"></div>
+      <div className="relative w-full h-56 bg-gradient-to-br from-blue-500 to-teal-500 overflow-hidden">
+        {member.photo ? (
+          <img
+            src={member.photo}
+            alt={member.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold bg-white/20 backdrop-blur-sm">
+            {member.avatar}
+          </div>
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-transparent to-black/20"></div>
       </div>
 
       {/* Content Section */}
@@ -148,7 +148,7 @@ const TeamPage = () => {
       introduction:
         'I am a senior scientist focussing on neuroimaging of the subcortex. My work combines ultra-high field magnetic resonance imaging with computational neuroanatomy in order to better understand the interplay of structure, connectivity and physiology of the subcortex in shaping human behavior.',
       avatar: 'PB',
-      photo: null,
+      photo: '/images/team/Pilou.jpg',
     },
     {
       id: 5,
@@ -157,7 +157,7 @@ const TeamPage = () => {
       introduction:
         'I am a PhD student supervised by Anneke Alkemade and Birte Forstmann at the University of Amsterdam (Netherlands). My research focuses on 3D reconstructions of whole-brain vascular immunoreactivity and Alzheimer’s pathology. I integrate high-resolution post-mortem MRI with (immuno)histochemistry to create frameworks that capture both the broader anatomical context and the fine-scale vascular and pathological profiles across (sub)cortical structures.',
       avatar: 'LG',
-      photo: null,
+      photo: '/images/team/Lysanne.jpg',
     },
     {
       id: 6,
@@ -166,16 +166,16 @@ const TeamPage = () => {
       introduction:
         'I am a PhD student working on human decision-making biases, such as spatial attention and decision priors. To this end, I combine structural and functional ultra-high field MRI with sequential sampling models.',
       avatar: 'EC',
-      photo: null,
+      photo: '/images/team/Ettore.png',
     },
     {
       id: 7,
       name: 'Rawien Balesar',
-      designation: 'PhD Student',
+      designation: 'Technical Assistant',
       introduction:
         'I am a technical assistant working with post-mortem data of subcortical nuclei in collaboration with Dick Swaab (Netherlands Institute for Neuroscience, Amsterdam, Netherlands).',
       avatar: 'RB',
-      photo: null,
+      photo: '/images/team/Rawien.jpg',
     },
   ]
 
@@ -185,7 +185,7 @@ const TeamPage = () => {
         <PageHeader heading="Meet Our Team" />
 
         {/* Faculty Section */}
-        <div className="mt-10 mb-10">
+        <div className="max-w-7xl mx-auto px-4 mt-10 mb-10">
           <SectionHeader title="Faculty" variant="leadership" />
           <LeadershipGrid leaders={leadership} />
         </div>
@@ -197,7 +197,7 @@ const TeamPage = () => {
         </div>
 
         {/* Team Members Section */}
-        <div className="mb-16">
+        <div className="max-w-7xl mx-auto px-4 mt-10 mb-10">
           <SectionHeader title="Senior scientists, Postdocs & PhD students" />
           <TeamGrid teamMembers={teamMembers} />
         </div>
