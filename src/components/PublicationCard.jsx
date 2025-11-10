@@ -5,6 +5,7 @@ import {
   formatDate,
   parseAuthors,
   getPubMedUrl,
+  getDoiUrl, // NEW: Import DOI utility function
 } from '../utils/publicationUtils'
 import { AuthorButton } from './AuthorButton'
 
@@ -19,24 +20,46 @@ const PublicationCard = ({ publication }) => {
   const displayedAuthors = showEtAl ? authorList.slice(0, 3) : authorList
   const remainingAuthors = showEtAl ? authorList.slice(3).join(', ') : ''
 
+  // Enhanced URL generation with DOI fallback
+  // Priority: link (URL from CSV) > DOI > PubMed ID
+  const publicationUrl =
+    publication.link ||
+    getDoiUrl(publication.doi) ||
+    getPubMedUrl(publication.pubmedId) ||
+    null
+
   return (
     <article className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-300 overflow-hidden">
       <div className="p-6 w-full">
         {/* Title and Date */}
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-3 w-full">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white leading-relaxed hover:text-blue-700 dark:hover:text-blue-400 transition-colors flex-1 min-w-0">
-            <a
-              href={publication.link || getPubMedUrl(publication.pubmedId)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline break-words"
-            >
-              {publication.title || 'Untitled Publication'}
-            </a>
+            {publicationUrl ? (
+              <a
+                href={publicationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline break-words"
+              >
+                {publication.title || 'Untitled Publication'}
+              </a>
+            ) : (
+              <span className="break-words">
+                {publication.title || 'Untitled Publication'}
+              </span>
+            )}
           </h2>
           <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 flex-shrink-0 mt-2 sm:mt-0">
             <Calendar className="h-4 w-4" />
-            <span>{formatDate(publication.date)}</span>
+            <span
+              className={
+                publication.date && /^\d{4}$/.test(publication.date)
+                  ? ''
+                  : 'italic opacity-75'
+              }
+            >
+              {formatDate(publication.date)}
+            </span>
           </div>
         </div>
 

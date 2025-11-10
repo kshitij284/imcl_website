@@ -6,19 +6,27 @@
 export const formatDate = (dateString) => {
   if (!dateString) return 'Date not available'
 
+  // If it's a 4-digit year, return as-is (valid)
   if (/^\d{4}$/.test(dateString)) {
     return dateString
   }
 
+  // Try to parse as full date
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
+    const date = new Date(dateString)
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
   } catch {
-    return dateString
+    // Fall through to return original string
   }
+
+  // If all else fails, return original with indicator
+  return `${dateString} (unverified)`
 }
 
 /**
@@ -70,6 +78,18 @@ export const getPubMedUrl = (pubmedId) => {
 }
 
 /**
+ * Get DOI URL from DOI string
+ * @param {string} doi - DOI string (e.g., "10.1038/nn.2886")
+ * @returns {string|null} DOI URL or null
+ */
+export const getDoiUrl = (doi) => {
+  if (!doi) return null
+  // Remove https://doi.org/ if already present in the DOI string
+  const cleanDoi = doi.replace(/^https?:\/\/doi\.org\//, '')
+  return `https://doi.org/${cleanDoi}`
+}
+
+/**
  * Capitalize journal name
  * @param {string} journal - Journal name
  * @returns {string} Capitalized journal name
@@ -100,12 +120,20 @@ export const sortPublications = (
 
     switch (sortBy) {
       case 'date':
-        aValue = /^\d{4}$/.test(a.date)
-          ? new Date(`${a.date}-01-01`)
-          : new Date(a.date || '1900-01-01')
-        bValue = /^\d{4}$/.test(b.date)
-          ? new Date(`${b.date}-01-01`)
-          : new Date(b.date || '1900-01-01')
+        // Check if dates are valid (4-digit year)
+        const aHasValidDate = a.date && /^\d{4}$/.test(a.date)
+        const bHasValidDate = b.date && /^\d{4}$/.test(b.date)
+
+        // If one has valid date and other doesn't, valid date comes first
+        if (aHasValidDate && !bHasValidDate) return -1
+        if (!aHasValidDate && bHasValidDate) return 1
+
+        // If both invalid, keep original order (stable sort)
+        if (!aHasValidDate && !bHasValidDate) return 0
+
+        // Both have valid dates, sort normally
+        aValue = new Date(`${a.date}-01-01`)
+        bValue = new Date(`${b.date}-01-01`)
         break
       case 'title':
         aValue = (a.title || '').toLowerCase()
