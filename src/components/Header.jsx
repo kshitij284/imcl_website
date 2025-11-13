@@ -84,6 +84,7 @@ const navItems = [
   { to: '/code-and-data', label: 'Code & Data' },
   { to: '/app', label: 'App' },
   { to: '/contact', label: 'Contact' },
+  { to: '/spring-school', label: 'Spring School'},
 ]
 
 const Navigation = () => (

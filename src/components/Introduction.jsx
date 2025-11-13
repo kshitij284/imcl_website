@@ -26,10 +26,10 @@ const Introduction = () => {
         <div className="flex items-center justify-center space-x-2">
           <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
           <p className="text-sm font-medium">
-            Registration is now open for Summer School 2026!
+            Registration is now open for Spring School 2026!
           </p>
           <a
-            href="#SummerSchool"
+            href="spring-school"
             className="text-blue-200 hover:text-white underline text-sm font-semibold transition-colors duration-200"
           >
             Register →

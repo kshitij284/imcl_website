@@ -7,6 +7,7 @@ import Team from './pages/TeamPage'
 import CnDPage from './pages/CnDPage'
 import BrainMeshViewer from './components/BrainMeshViewer'
 import Contact from './pages/Contact'
+import SpringSchool from './pages/SpringSchool'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/code-and-data" element={<CnDPage />} />
           <Route path="/app" element={<BrainMeshViewer />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/spring-school" element={<SpringSchool/>}/>
         </Routes>
         <Footer />
       </div>
