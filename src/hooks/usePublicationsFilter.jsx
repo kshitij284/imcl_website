@@ -21,15 +21,43 @@ export const usePublicationsFilter = (publications, authorFilter = null) => {
 
     // Then filter publications based on search term
     if (searchTerm) {
-      const term = searchTerm.toLowerCase()
-      filtered = filtered.filter(
-        (pub) =>
-          (pub.title && pub.title.toLowerCase().includes(term)) ||
-          (pub.authors && pub.authors.toLowerCase().includes(term)) ||
-          (pub.journal && pub.journal.toLowerCase().includes(term)) ||
-          (pub.pubmedId && pub.pubmedId.toString().includes(term)) ||
-          (pub.doi && pub.doi.toLowerCase().includes(term))
-      )
+      const term = searchTerm.toLowerCase().trim()
+
+      filtered = filtered.filter((pub) => {
+        // Normalize and check each field
+        const titleMatch =
+          pub.title && pub.title.trim().toLowerCase().includes(term)
+        const authorsMatch =
+          pub.authors && pub.authors.trim().toLowerCase().includes(term)
+        const journalMatch =
+          pub.journal && pub.journal.trim().toLowerCase().includes(term)
+        const yearMatch = pub.date && pub.date.toString().trim().includes(term)
+        const idMatch =
+          pub.pubmedId &&
+          pub.pubmedId.toString().trim().toLowerCase().includes(term)
+        const doiMatch = pub.doi && pub.doi.trim().toLowerCase().includes(term)
+
+        // Only search in URL if no other field matches (to avoid false positives)
+        const urlMatch =
+          !titleMatch &&
+          !authorsMatch &&
+          !journalMatch &&
+          !yearMatch &&
+          !idMatch &&
+          !doiMatch &&
+          pub.link &&
+          pub.link.trim().toLowerCase().includes(term)
+
+        return (
+          titleMatch ||
+          authorsMatch ||
+          journalMatch ||
+          yearMatch ||
+          idMatch ||
+          doiMatch ||
+          urlMatch
+        )
+      })
     }
 
     // Sort publications

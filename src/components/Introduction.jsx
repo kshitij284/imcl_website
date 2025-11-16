@@ -28,12 +28,12 @@ const Introduction = () => {
           <p className="text-sm font-medium">
             Registration is now open for Spring School 2026!
           </p>
-          <a
-            href="spring-school"
+          <Link
+            to= "spring-school#Application"
             className="text-blue-200 hover:text-white underline text-sm font-semibold transition-colors duration-200"
           >
             Register →
-          </a>
+          </Link>
         </div>
       </div>
 

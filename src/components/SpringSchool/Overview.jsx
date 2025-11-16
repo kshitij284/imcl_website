@@ -184,7 +184,7 @@ function Overview() {
                 <p className="text-gray-600 dark:text-gray-300 mb-3">
                   Lectures from leading experts including:
                 </p>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-600 dark:text-gray-300i font-bold">
                   Andrew Heathcote, Dora Matzke, Michael Nunez, Steven Miletić,
                   and Birte Forstmann.
                 </p>
@@ -208,7 +208,7 @@ function Overview() {
             </div>
           </div>
         </div>
-        
+
         {/* Organization */}
         <div className="py-8">
           <div className="text-center mb-8">

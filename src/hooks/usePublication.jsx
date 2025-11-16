@@ -25,6 +25,7 @@ const parseCSVLine = (line) => {
       }
     } else if (char === ',' && !inQuotes) {
       // End of field - only split on commas outside quotes
+      // Trim the value to remove any extra whitespace
       result.push(current.trim())
       current = ''
     } else {
@@ -32,7 +33,7 @@ const parseCSVLine = (line) => {
     }
   }
 
-  // Add last field
+  // Add last field and trim
   result.push(current.trim())
   return result
 }
@@ -100,27 +101,71 @@ export const usePublications = () => {
       const parsedData = parseCSV(csvData)
 
       const processedData = parsedData
-        .map((row, index) => ({
-          id: row['pmid'] || `pub-${index}`,
-          pubmedId:
+        .map((row, index) => {
+          // Trim and clean all fields
+          const pmid = (
             row['pmid'] ||
             row['pubmed_id'] ||
             row['pubmed id'] ||
             row['pubmedid'] ||
-            '',
-          title: row['title'] || row['publication title'] || row['name'] || '',
-          authors: row['authors'] || row['author'] || row['author list'] || '',
-          date:
+            ''
+          ).trim()
+          const doi = (row['doi'] || '').trim()
+          const title = (
+            row['title'] ||
+            row['publication title'] ||
+            row['name'] ||
+            ''
+          ).trim()
+          const authors = (
+            row['authors'] ||
+            row['author'] ||
+            row['author list'] ||
+            ''
+          ).trim()
+          const year = (
             row['year'] ||
             row['date'] ||
             row['publication date'] ||
             row['publication_year'] ||
-            '',
-          journal: row['journal'] || row['journal name'] || row['source'] || '',
-          link: row['url'] || row['link'] || row['doi url'] || '',
-          doi: row['doi'] || '',
-          abstract: row['abstract'] || row['summary'] || '',
-        }))
+            ''
+          ).trim()
+          const journal = (
+            row['journal'] ||
+            row['journal name'] ||
+            row['source'] ||
+            ''
+          ).trim()
+          const url = (row['url'] || row['link'] || row['doi url'] || '').trim()
+          const abstract = (row['abstract'] || row['summary'] || '').trim()
+
+          // CRITICAL FIX: Always include index to guarantee unique IDs
+          // The CSV has duplicate PMIDs and DOIs, so we must use index
+          let id
+          if (pmid) {
+            id = `${pmid}-${index}`
+          } else if (doi) {
+            // Shorten DOI-based ID and add index
+            const shortDoi = doi.substring(0, 30).replace(/[^\w]/g, '-')
+            id = `doi-${shortDoi}-${index}`
+          } else {
+            // Use title-based ID with index
+            const shortTitle = title.substring(0, 20).replace(/[^\w]/g, '-')
+            id = `pub-${index}-${shortTitle}`
+          }
+
+          return {
+            id,
+            pubmedId: pmid,
+            title,
+            authors,
+            date: year,
+            journal,
+            link: url,
+            doi,
+            abstract,
+          }
+        })
         .filter((pub) => {
           // Only filter out completely invalid entries
 

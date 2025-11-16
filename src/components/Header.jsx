@@ -84,12 +84,12 @@ const navItems = [
   { to: '/code-and-data', label: 'Code & Data' },
   { to: '/app', label: 'App' },
   { to: '/contact', label: 'Contact' },
-  { to: '/spring-school', label: 'Spring School'},
+  { to: '/spring-school', label: 'Spring School' },
 ]
 
 const Navigation = () => (
   <nav
-    className="hidden md:flex space-x-2"
+    className="hidden md:flex items-center space-x-3 ml-12"
     role="navigation"
     aria-label="Primary"
   >

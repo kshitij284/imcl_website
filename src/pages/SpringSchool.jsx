@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Overview from '../components/springSchool/Overview'
 import Program from '../components/springSchool/Program'
 import PracticalInfo from '../components/springSchool/PracticalInfo'
 import Application from '../components/springSchool/Application'
 
 function SpringSchool() {
+  const location = useLocation()
   const [activeTab, setActiveTab] = useState('overview')
 
   const tabs = [
@@ -13,6 +15,14 @@ function SpringSchool() {
     { id: 'practical', label: 'Practical Information' },
     { id: 'application', label: 'Application' },
   ]
+
+  // Read hash from URL and set active tab
+  useEffect(() => {
+    const hash = location.hash.replace('#', '').toLowerCase()
+    if (hash && tabs.some((tab) => tab.id === hash)) {
+      setActiveTab(hash)
+    }
+  }, [location.hash])
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors duration-300">

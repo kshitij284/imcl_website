@@ -74,7 +74,60 @@ export const formatAuthors = (authors, maxAuthors = 3) => {
  */
 export const getPubMedUrl = (pubmedId) => {
   if (!pubmedId) return null
-  return `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`
+
+  // Handle PMC IDs
+  if (pubmedId.startsWith('PMC')) {
+    return `https://www.ncbi.nlm.nih.gov/pmc/articles/${pubmedId}/`
+  }
+
+  // Handle regular PubMed IDs (numeric)
+  if (/^\d+$/.test(pubmedId)) {
+    return `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`
+  }
+
+  // For other ID types (like Google Scholar), return null
+  return null
+}
+
+/**
+ * Detect the type of publication ID
+ * @param {string} pubmedId - Publication ID
+ * @returns {string} ID type: 'pubmed', 'pmc', 'scholar', or 'unknown'
+ */
+export const detectIdType = (pubmedId) => {
+  if (!pubmedId) return 'unknown'
+
+  if (pubmedId.startsWith('PMC')) return 'pmc'
+  if (/^\d+$/.test(pubmedId)) return 'pubmed'
+  if (pubmedId.includes(':')) return 'scholar' // Google Scholar IDs often have ":"
+
+  return 'unknown'
+}
+
+/**
+ * Get the best available link for a publication
+ * Priority: 1. Provided URL, 2. DOI URL, 3. PubMed/PMC URL
+ * @param {Object} publication - Publication object
+ * @returns {string|null} Best available URL or null
+ */
+export const getBestLink = (publication) => {
+  // First priority: use the URL from CSV if it exists
+  if (publication.link) {
+    return publication.link
+  }
+
+  // Second priority: construct DOI URL if DOI exists
+  if (publication.doi) {
+    return getDoiUrl(publication.doi)
+  }
+
+  // Third priority: construct PubMed/PMC URL if ID exists
+  if (publication.pubmedId) {
+    const pubmedUrl = getPubMedUrl(publication.pubmedId)
+    if (pubmedUrl) return pubmedUrl
+  }
+
+  return null
 }
 
 /**
@@ -124,16 +177,20 @@ export const sortPublications = (
         const aHasValidDate = a.date && /^\d{4}$/.test(a.date)
         const bHasValidDate = b.date && /^\d{4}$/.test(b.date)
 
-        // If one has valid date and other doesn't, valid date comes first
-        if (aHasValidDate && !bHasValidDate) return -1
-        if (!aHasValidDate && bHasValidDate) return 1
+        // If one has valid date and other doesn't, valid date comes first/last based on sortOrder
+        if (aHasValidDate && !bHasValidDate) {
+          return sortOrder === 'desc' ? -1 : 1
+        }
+        if (!aHasValidDate && bHasValidDate) {
+          return sortOrder === 'desc' ? 1 : -1
+        }
 
         // If both invalid, keep original order (stable sort)
         if (!aHasValidDate && !bHasValidDate) return 0
 
         // Both have valid dates, sort normally
-        aValue = new Date(`${a.date}-01-01`)
-        bValue = new Date(`${b.date}-01-01`)
+        aValue = parseInt(a.date, 10) // Compare years as integers, not dates
+        bValue = parseInt(b.date, 10)
         break
       case 'title':
         aValue = (a.title || '').toLowerCase()
