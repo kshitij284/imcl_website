@@ -24,7 +24,7 @@ const SearchAndControls = ({
           <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
-            placeholder="Search by title, authors, DOI, or ID..."
+            placeholder="Search by Title, Authors or DOI"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors duration-300"
@@ -48,7 +48,6 @@ const SearchAndControls = ({
               <option value="date">Year</option>
               <option value="title">Title</option>
               <option value="authors">Authors</option>
-              <option value="journal">Journal</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
               <ChevronDown className="h-4 w-4" />
@@ -56,7 +55,7 @@ const SearchAndControls = ({
           </div>
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 flex items-center justify-center transition-colors duration-300"
+            className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 flex items-center justify-center text-gray-700 dark:text-gray-200 transition-colors duration-300"
             aria-label={`Sort ${
               sortOrder === 'asc' ? 'descending' : 'ascending'
             }`}
