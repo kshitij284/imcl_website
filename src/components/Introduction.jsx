@@ -22,7 +22,7 @@ const Introduction = () => {
                  dark:from-gray-800 dark:to-gray-900 
                  transition-colors duration-300"
     >
-      <div className="w-full bg-blue-600 dark:bg-blue-700 text-white py-2 px-4 shadow-sm">
+      {/* <div className="w-full bg-blue-600 dark:bg-blue-700 text-white py-2 px-4 shadow-sm">
         <div className="flex items-center justify-center space-x-2">
           <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
           <p className="text-sm font-medium">
@@ -35,7 +35,7 @@ const Introduction = () => {
             Register →
           </Link>
         </div>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">

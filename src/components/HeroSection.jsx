@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import VennDiagram from './VennDiagram'
+import { Link } from 'react-router-dom'
 
 const HeroSection = () => {
   const heroSectionRef = useRef(null)
@@ -37,6 +38,21 @@ const HeroSection = () => {
   }
 
   return (
+    <>
+    <div className="w-full bg-blue-600 dark:bg-blue-700 text-white py-2 px-4 shadow-sm">
+        <div className="flex items-center justify-center space-x-2">
+          <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+          <p className="text-sm font-medium">
+            Registration is now open for Spring School 2026!
+          </p>
+          <Link
+            to= "spring-school#Application"
+            className="text-blue-200 hover:text-white underline text-sm font-semibold transition-colors duration-200"
+          >
+            Register →
+          </Link>
+        </div>
+    </div>
     <section
       id="home"
       ref={heroSectionRef}
@@ -52,6 +68,7 @@ const HeroSection = () => {
         </div>
       </div>
     </section>
+    </> 
   )
 }
 
@@ -93,7 +110,7 @@ const HeroContent = ({ selectedCircle }) => {
         'Joint models allow us to simultaneously model and understand all modalities of data, acquired from behavior and the brain.',
     },
     null: {
-      title: '',
+      title: 'Welcome',
       description:
         'We take a rigorous interdisciplinary approach to understanding the deep brain, integrating insights from functional neuroanatomy, mathematical psychology, and cognitive and clinical neuroscience. Our work combines state-of-the-art methodologies—including whole-brain post-mortem processing, ultra-high-field (7T) MRI, and Bayesian hierarchical modeling—to advance both theoretical understanding and clinical relevance',
     },
